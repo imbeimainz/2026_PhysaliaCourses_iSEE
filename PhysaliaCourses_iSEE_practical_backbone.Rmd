@@ -1,0 +1,134 @@
+---
+title: >
+  Exploring and Visualizing Omics Data with iSEE<br>
+subtitle: >
+  Hands on sessions backbone
+author: > 
+  Federico Marini</br>
+  IMBEI, University Medical Center Mainz</br>
+date: >
+  2026/11/25-26<br>Physalia Courses<br><br>
+  <a href="https://federicomarini.github.io">``r fontawesome::fa("home")` https://federicomarini.github.io`<br>
+  <a href="mailto:marinif@uni-mainz.de">`r fontawesome::fa("paper-plane")`&nbsp; `marinif@uni-mainz.de`</a><br>
+  <a href="https://federicomarini.bsky.social">``r fontawesome::fa("bluesky")` @federicomarini.bsky.social`<br>
+  <a href="http://github.com/federicomarini">`r fontawesome::fa('github')`&nbsp; `@federicomarini`</a><br>
+output:
+  xaringan::moon_reader:
+    css: ["default", "default-fonts","css/FMstyles.css","css/animate.css"]
+    lib_dir: libs
+    # chakra: libs/remark-latest.min.js
+    nature:
+      ratio: '16:9'
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      titleSlideClass: [center, middle]
+      # beforeInit: "https://platform.twitter.com/widgets.js"
+---
+
+layout: true
+
+```{r htmltools, include=FALSE}
+stopifnot(requireNamespace("htmltools"))
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+```
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(
+  eval = TRUE,
+  message = FALSE,
+  echo = FALSE,
+  warnings = FALSE,
+  fig.align = "center"
+)
+```
+
+---
+
+# Useful pre-requisites
+
+* Familiarity with bulk or single-cell sequencing data (ideally scRNA-seq).
+* Familiarity with the SummarizedExperiment/SingleCellExperiment class, or alternatively the Seurat or AnnData frameworks - basically, any of the widely used ecosystems for working with/storing/processing single-cell data
+* Familiarity with single-cell data visualizations and representations
+
+---
+
+# Learning outcomes
+
+By the end of this course, participants will be able to:
+
+* Set up a local environment for running iSEE apps.
+* Interact with components of the iSEE user interface to visually inspect and discuss various datasets.
+* Identify and locate configurable aspects of iSEE apps.
+* Practice interactive visualization over a single-cell RNA-sequencing workflow.
+* Imagine use cases and future developments for interactive visualization as part of computational workflows.
+* Design and create iSEE instances for collections of datasets.
+
+---
+
+# Session 0
+
+The presentation we just have seen --> accessible [here](PhysaliaCourses_iSEE_lecture.html)
+
+---
+
+# Session 1
+
+Preparation, installation, launch!
+
+https://isee.github.io/iUSEiSEE/articles/d01_preparation.html
+
+---
+
+# Session 2
+
+Overview of iSEE - A detailed overview of iSEE and its functionality, from the panel types to the multiple options in each of them.  
+Plus, something on all the controls available in iSEE
+
+https://isee.github.io/iUSEiSEE/articles/d02_iSEE_overview.html
+
+---
+
+# Session 3
+
+Exploration, done for real and in-depth, with iSEE  
+... with a keen eye on working in a reproudcible manner
+
+https://isee.github.io/iUSEiSEE/articles/d02_iSEE_overview.html
+
+Interactive exploration exercises
+
+---
+
+# Session 4
+
+The iSEE cookbook - a set of self-contained recipes with simple-to-advanced tasks one can complete within iSEE.  
+First, a tiny recap and Q&A on day 1 sessions
+
+https://isee.github.io/iUSEiSEE/articles/d03_iSEE_quickrecipes.html
+
+---
+
+# Session 5
+
+Bonus content - exploring the components of the iSEEverse 
+
+https://isee.github.io/iUSEiSEE/articles/d04_bonus_content.html
+
+* iSEEu & iSEEfier
+* iSEEDE & iSEEpathways
+* iSEEindex & iSEEhub
+* iSEEid
+
+---
+
+# Session 6
+
+Deploying data, telling stories: from the tour to a full app, working on your own objects
+
+https://isee.github.io/iUSEiSEE/articles/d04_bonus_content.html
+
+Questions and answers
+
+
