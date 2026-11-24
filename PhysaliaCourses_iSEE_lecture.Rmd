@@ -840,11 +840,15 @@ My research group & the **`iSEE` development team** & Bioc Community `r emo::ji(
 
 # Time to get our hands dirty!
 
-Install the workshop package (should solve all dependencies!):  
-`remotes::install_github("iSEE/iUSEiSEE")`
+Let's navigate to https://github.com/iSEE/iUSEiSEE/ - rendered at https://iSEE.github.io/iUSEiSEE. This is the "official" full documentation to learn how to use iSEE.
 
-Clone it locally/download as zip and unpack it:  
+If desired: Clone it locally/download as zip and unpack it:  
 [`https://github.com/iSEE/iUSEiSEE/`](https://github.com/iSEE/iUSEiSEE/) --> `git clone git@github.com:iSEE/iUSEiSEE.git`
 
-Start using the `iUSEiSEE.Rproj` file
+Clone this repo on top - contains the presentation and the template for the exercises
+
+Start using the `2026_PhysaliaCourses_iSEE.Rproj` file in it
+
+
+
 
