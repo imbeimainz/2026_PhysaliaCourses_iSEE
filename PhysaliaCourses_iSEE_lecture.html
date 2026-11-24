@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Exploring and Visualizing Omics Data with iSEE </title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/all.min.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/FMstyles.css" type="text/css" />
+    <link rel="stylesheet" href="css/animate.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, title-slide
+
+.title[
+# <p>Exploring and Visualizing Omics Data with iSEE<br></p>
+]
+.subtitle[
+## <p><i>iSEE therefore I understand data (better)</i></p>
+]
+.author[
+### <p>Federico Marini</br> IMBEI, University Medical Center Mainz</br></p>
+]
+.date[
+### <p>2026/11/25-26<br>Physalia Courses<br><br> <a href="https://federicomarini.github.io"><code><svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/></svg> https://federicomarini.github.io</code><br> <a href="mailto:marinif@uni-mainz.de"><svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M16.1 260.2c-22.6 12.9-20.5 47.3 3.6 57.3L160 376V479.3c0 18.1 14.6 32.7 32.7 32.7c9.7 0 18.9-4.3 25.1-11.8l62-74.3 123.9 51.6c18.9 7.9 40.8-4.5 43.9-24.7l64-416c1.9-12.1-3.4-24.3-13.5-31.2s-23.3-7.5-34-1.4l-448 256zm52.1 25.5L409.7 90.6 190.1 336l1.2 1L68.2 285.7zM403.3 425.4L236.7 355.9 450.8 116.6 403.3 425.4z"/></svg>  <code>marinif@uni-mainz.de</code></a><br> <a href="https://federicomarini.bsky.social"><code><svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M407.8 294.7c-3.3-.4-6.7-.8-10-1.3c3.4 .4 6.7 .9 10 1.3zM288 227.1C261.9 176.4 190.9 81.9 124.9 35.3C61.6-9.4 37.5-1.7 21.6 5.5C3.3 13.8 0 41.9 0 58.4S9.1 194 15 213.9c19.5 65.7 89.1 87.9 153.2 80.7c3.3-.5 6.6-.9 10-1.4c-3.3 .5-6.6 1-10 1.4C74.3 308.6-9.1 342.8 100.3 464.5C220.6 589.1 265.1 437.8 288 361.1c22.9 76.7 49.2 222.5 185.6 103.4c102.4-103.4 28.1-156-65.8-169.9c-3.3-.4-6.7-.8-10-1.3c3.4 .4 6.7 .9 10 1.3c64.1 7.1 133.6-15.1 153.2-80.7C566.9 194 576 75 576 58.4s-3.3-44.7-21.6-52.9c-15.8-7.1-40-14.9-103.2 29.8C385.1 81.9 314.1 176.4 288 227.1z"/></svg> @federicomarini.bsky.social</code><br> <a href="http://github.com/federicomarini"><svg aria-hidden="true" role="img" viewBox="0 0 496 512" style="height:1em;width:0.97em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>  <code>@federicomarini</code></a><br></p>
+]
+
+---
+
+
+layout: true
+
+&lt;!-- &lt;div class="my-footer"&gt; --&gt;
+&lt;!-- &lt;span&gt; --&gt;
+&lt;!-- &amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp; --&gt;
+&lt;!-- &amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp; --&gt;
+&lt;!-- &amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp; --&gt;
+&lt;!-- &amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp; --&gt;
+&lt;!-- &lt;a href="https://federicomarini.github.io/ULBSingleCellMeetup/"&gt;&lt;code&gt;https://federicomarini.github.io/ULBSingleCellMeetup/&lt;/code&gt;&lt;/a&gt; --&gt;
+&lt;!-- &lt;/span&gt; --&gt;
+&lt;!-- &lt;/div&gt; --&gt;
+
+
+
+
+
+
+
+---
+
+# About me
+
+--
+
+Hi, I am Federico  
+Group leader, Bioinformatics at the IMBEI, Unimedizin Mainz ("come for the view - stay for the science")
+
+--
+
+I am normally busy with the development of **methods and software for interactive and reproducible research**
+  - Data visualization and exploration
+  - Advanced modeling
+  - Interpretation and contextualization
+
+--
+
+We do...
+
+* **Transcriptome data analysis** &amp; other omics assays (ATAC-seq, ChIP-seq, ...)
+
+* Development of **methods/software** and **web-based applications** for data analysis
+
+* Integration of **different omics layers** at different scales, with clinical covariates, **streamlining processes** with (hopefully) clever infrastructure solutions
+
+
+--
+
+You can find this presentation here:
+
+&lt;!-- [`https://federicomarini.github.io/RMCR2021/`](https://federicomarini.github.io/RMCR2021/)&lt;br&gt; --&gt;
+&lt;!-- [`https://bit.ly/iSEE_RMCR`](https://bit.ly/iSEE_RMCR) --&gt;
+
+&lt;!-- .vlarge[1) Better exploration, of data AND results] --&gt;
+
+&lt;!-- .vlarge[2) Extraction of additional layers of information (from the same data)] --&gt;
+
+&lt;!-- .vlarge[3) Integration of different analyses and network based information] --&gt;
+
+&lt;!-- .vlarge[4) Better communication and reachout] --&gt;
+
+---
+
+background-image: url("images/marie.png")
+background-size: cover
+background-position: 50% 50%
+class: center, bottom, inverse
+
+--
+
+# Does the 
+
+# **exploration**
+
+# of your data spark joy?
+
+---
+
+background-image: url("images/marie.png")
+background-size: cover
+background-position: 50% 50%
+class: center, bottom, inverse
+
+# Does the 
+
+# **exploration AND interpretation**
+
+# of your data spark joy?
+
+---
+
+background-image: url("images/console_logcounts_sparse.png")
+background-size: contain
+background-position: 50% 50%
+class: middle, center
+
+# (Interactive) Exploration and visualization: why?
+
+Effective and efficient methods are key to deliver...
+
+--
+
+<svg aria-hidden="true" role="img" viewBox="0 0 448 512" style="height:1em;width:0.88em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg> better **quality assessment**
+
+--
+
+<svg aria-hidden="true" role="img" viewBox="0 0 448 512" style="height:1em;width:0.88em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg> better **generation of research hypotheses**
+
+--
+
+<svg aria-hidden="true" role="img" viewBox="0 0 448 512" style="height:1em;width:0.88em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg> better **representation of the results**
+
+--
+
+<svg aria-hidden="true" role="img" viewBox="0 0 448 512" style="height:1em;width:0.88em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg> better **communication** of findings
+
+--
+
+&lt;!-- Most of you might be familiar with `CELLxGENE`...   --&gt;
+
+## Where do we stand?
+
+--
+
+<svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M184 0c30.9 0 56 25.1 56 56V456c0 30.9-25.1 56-56 56c-28.9 0-52.7-21.9-55.7-50.1c-5.2 1.4-10.7 2.1-16.3 2.1c-35.3 0-64-28.7-64-64c0-7.4 1.3-14.6 3.6-21.2C21.4 367.4 0 338.2 0 304c0-31.9 18.7-59.5 45.8-72.3C37.1 220.8 32 207 32 192c0-30.7 21.6-56.3 50.4-62.6C80.8 123.9 80 118 80 112c0-29.9 20.6-55.1 48.3-62.1C131.3 21.9 155.1 0 184 0zM328 0c28.9 0 52.6 21.9 55.7 49.9c27.8 7 48.3 32.1 48.3 62.1c0 6-.8 11.9-2.4 17.4c28.8 6.2 50.4 31.9 50.4 62.6c0 15-5.1 28.8-13.8 39.7C493.3 244.5 512 272.1 512 304c0 34.2-21.4 63.4-51.6 74.8c2.3 6.6 3.6 13.8 3.6 21.2c0 35.3-28.7 64-64 64c-5.6 0-11.1-.7-16.3-2.1c-3 28.2-26.8 50.1-55.7 50.1c-30.9 0-56-25.1-56-56V56c0-30.9 25.1-56 56-56z"/></svg> The data is **large** ("can't fit in our head")  
+<svg aria-hidden="true" role="img" viewBox="0 0 320 512" style="height:1em;width:0.62em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M80 160c0-35.3 28.7-64 64-64h32c35.3 0 64 28.7 64 64v3.6c0 21.8-11.1 42.1-29.4 53.8l-42.2 27.1c-25.2 16.2-40.4 44.1-40.4 74V320c0 17.7 14.3 32 32 32s32-14.3 32-32v-1.4c0-8.2 4.2-15.8 11-20.2l42.2-27.1c36.6-23.6 58.8-64.1 58.8-107.7V160c0-70.7-57.3-128-128-128H144C73.3 32 16 89.3 16 160c0 17.7 14.3 32 32 32s32-14.3 32-32zm80 320a40 40 0 1 0 0-80 40 40 0 1 0 0 80z"/></svg> Our task is **complex**  
+<svg aria-hidden="true" role="img" viewBox="0 0 64 512" style="height:1em;width:0.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M64 64c0-17.7-14.3-32-32-32S0 46.3 0 64V320c0 17.7 14.3 32 32 32s32-14.3 32-32V64zM32 480a40 40 0 1 0 0-80 40 40 0 1 0 0 80z"/></svg> The Pro &amp; the Con: **We are not alone**, we work with a variety of experts  
+<svg aria-hidden="true" role="img" viewBox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M297.2 248.9C311.6 228.3 320 203.2 320 176c0-70.7-57.3-128-128-128S64 105.3 64 176c0 27.2 8.4 52.3 22.8 72.9c3.7 5.3 8.1 11.3 12.8 17.7l0 0c12.9 17.7 28.3 38.9 39.8 59.8c10.4 19 15.7 38.8 18.3 57.5H109c-2.2-12-5.9-23.7-11.8-34.5c-9.9-18-22.2-34.9-34.5-51.8l0 0 0 0c-5.2-7.1-10.4-14.2-15.4-21.4C27.6 247.9 16 213.3 16 176C16 78.8 94.8 0 192 0s176 78.8 176 176c0 37.3-11.6 71.9-31.4 100.3c-5 7.2-10.2 14.3-15.4 21.4l0 0 0 0c-12.3 16.8-24.6 33.7-34.5 51.8c-5.9 10.8-9.6 22.5-11.8 34.5H226.4c2.6-18.7 7.9-38.6 18.3-57.5c11.5-20.9 26.9-42.1 39.8-59.8l0 0 0 0 0 0c4.7-6.4 9-12.4 12.7-17.7zM192 128c-26.5 0-48 21.5-48 48c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-44.2 35.8-80 80-80c8.8 0 16 7.2 16 16s-7.2 16-16 16zm0 384c-44.2 0-80-35.8-80-80V416H272v16c0 44.2-35.8 80-80 80z"/></svg> Proper analysis tools _should_ combine **interactivity and reproducibility**
+
+&lt;!-- - use structures/containers that support alternative (out-of-memory) representations --&gt;
+&lt;!-- - yet we are curious and stubborn enough that we want to try and understand this --&gt;
+&lt;!-- - mind (and bridge) the gap when **communicating**! --&gt;
+&lt;!-- ### Proper analysis tools _should_ combine **interactivity and reproducibility** --&gt;
+
+---
+
+## `pcaExplorer` and `ideal`: exploring and modeling RNA-seq data
+
+Nowadays it takes more than just two to tango!
+
+--
+
+&lt;p align="center"&gt;
+&lt;img src="images/ss_pcaexplorer_ideal.png" alt="" height = "450"/&gt;
+&lt;/p&gt;
+
+---
+
+# I've seen things you people wouldn't believe
+
+--
+
+&lt;p align="center"&gt;
+&lt;img src="images/pepesilvia.gif" alt="" height = "450"/&gt;
+&lt;/p&gt;
+
+*Collaborative effort - Oil on canvas*
+
+---
+
+## `GeneTonic`: Better exploration &amp; interpretation, of data AND results
+
+&lt;p align="center"&gt;
+&lt;img src="images/Figs_and_supps_GeneTonic_fig1.png" alt="" height = "450"/&gt;
+&lt;/p&gt;
+
+Marini et al., BMC Bioinformatics (2021); Ludt et al., Current Protocols (2022)
+
+---
+
+## `SummarizedExperiment`/`SingleCellExperiment`
+
+&lt;p align="center"&gt;
+&lt;img src="images/sce_class.png" alt="" height="400"/&gt;
+&lt;/p&gt;
+
+&lt;!-- Thank you Martin Morgan!!! --&gt;
+
+&lt;!-- or the one from the OSCA paper? --&gt;
+
+--
+
+It can store [**RNA-seq**|DNA methylation|Hi-C|Microarray|Mass cytometry|SNPs] data
+
+Excellent primer on single cell data analysis I contributed to:  [`https://osca.bioconductor.org`](https://osca.bioconductor.org)!
+
+&lt;!-- iSEE focuses on the SingleCellExperiment class. --&gt;
+&lt;!-- This class stores all the data and metadata associated with assays, cells, and features. --&gt;
+
+&lt;!-- SingleCellExperiment usage in a workflow --&gt;
+
+&lt;!-- The SingleCellExperiment class is designed to accomodate all the information produced along a typical single-cell analysis workflow. --&gt;
+
+---
+
+# Designing `iSEE`: Looking for a silver bullet
+
+Data exploration is crucial: 
+
+- No general tool for doing this **interactively**, limited to assay types or analysis steps
+- No support for **reproducibility**, while keeping it intuitive and usable
+
+--
+
+Joint work with Aaron Lun, Charlotte Soneson, Kevin Rue-Albrecht initiated at [#EuroBioc2017](https://twitter.com/hashtag/EuroBioC2017)
+
+&lt;p align="center"&gt;
+&lt;img src="images/lun_aaron_web.jpg" alt="" width="200"/&gt;
+&lt;img src="images/twit_charlotte.jpg" alt="" width="200"/&gt;
+&lt;img src="images/twit_kev.jpg" alt="" width="200"/&gt;
+&lt;/p&gt;
+
+--
+
+`"We could have an interactive SummarizedExperiment Explorer tool..."`
+
+--
+
+## Any early users in the audience?
+
+&lt;!-- Visualize my data in any (precomputed) reduced dimension space. --&gt;
+&lt;!-- Color the data points with any experimental covariate (e.g. batch). --&gt;
+&lt;!-- Color the data points with any expression data. --&gt;
+&lt;!-- Select data points in a plot, and highlight them in another. --&gt;
+&lt;!-- Visualize the distribution of any assay or metadata. --&gt;
+&lt;!-- Visualize the correlation between gene A and gene B, specifically in ‘this’ or ‘that’ cluster --&gt;
+
+&lt;!-- Fully empower the data generators - and get lazy! --&gt;
+
+---
+
+background-image: url("images/manycommitsago.png")
+background-size: contain
+background-position: 50% 50%
+class: center, bottom
+
+# &gt; 3000 commits ago...
+
+[`https://github.com/iSEE/iSEE/tree/021e3e20cfdb194e511f8097ed544329bd46bcd6`](https://github.com/iSEE/iSEE/tree/021e3e20cfdb194e511f8097ed544329bd46bcd6)
+
+---
+
+class: animated, tada
+
+# Hello `iSEE`
+
+&lt;p align="center"&gt;
+&lt;img src="images/iSEE.png" width="350"/&gt;
+&lt;/p&gt;
+
+* [`https://f1000research.com/articles/7-741/v1`](https://f1000research.com/articles/7-741/v1), live apps inside
+* Available in Bioconductor [`https://bioconductor.org/packages/iSEE/`](https://bioconductor.org/packages/iSEE/)
+* 🍾 [`https://blog.rstudio.com/2019/04/05/first-shiny-contest-winners`](https://blog.rstudio.com/2019/04/05/first-shiny-contest-winners) 🍾
+
+---
+
+class: bottom
+
+background-image: url("images/iSEEmeme.jpg")
+background-size: contain
+background-position: 50% 50%
+
+--
+&lt;!----&gt;
+## Using iSEE is easy as
+
+# `iSEE(sce)`
+
+🤞
+
+---
+
+# `iSEE` ❤️ SingleCellExperiment
+
+&lt;p align="center"&gt;
+&lt;img src="images/OSCA-figure-4.png" width="50%"/&gt;
+&lt;/p&gt;
+
+---
+
+# `iSEE` in action: the *Tabula Muris* dataset
+
+.pull-left[
+&lt;p align="center"&gt;
+&lt;img src="images/iSEE.png" width="170"/&gt;
+&lt;/p&gt;
+]
+
+.pull-right[
+&lt;img src="images/tabulamuris.png" alt="" width="500"/&gt;
+]
+
+--
+
+Preprocessing details + `iSEE` configuration for this set can be found at 
+[`https://github.com/federicomarini/iSEE_instances`](https://github.com/federicomarini/iSEE_instances/tree/master/iSEE_tabulamuris)
+
+- 20 organs and tissues, from 8 different mice
+- 23036 genes
+- 43598 cells `\(\rightarrow\)` &gt;1 billion data points
+
+
+
+---
+
+class: center, bottom
+
+# A tour of the panels: think of *any* visualization type...
+
+---
+
+background-image: url("images/tm_isee_allpanels.png")
+background-size: contain
+background-position: 50% 50%
+class: center, bottom
+
+# A tour of the panels: think of *any* visualization type...
+
+---
+
+background-image: url("images/ss_reddim.png")
+background-position: 50% 50%
+background-size: contain
+class: center, animated, zoomInLeft
+
+---
+
+background-image: url("images/tm_isee_allpanels.png")
+background-size: contain
+background-position: 50% 50%
+class: center, animated, fadeIn
+
+---
+
+background-image: url("images/ss_featassay.png")
+background-size: contain
+background-position: 50% 50%
+class: center, animated, zoomIn
+
+---
+
+background-image: url("images/tm_isee_allpanels.png")
+background-size: contain
+background-position: 50% 50%
+class: center, animated, fadeIn
+
+---
+
+background-image: url("images/ss_samplesassay.png")
+background-size: contain
+background-position: 50% 50%
+class: center, animated, zoomInRight
+
+---
+
+background-image: url("images/tm_isee_allpanels.png")
+background-size: contain
+background-position: 50% 50%
+class: center, animated, fadeIn
+
+---
+
+background-image: url("images/ss_coldata_rowdata.png")
+background-size: contain
+background-position: 50% 50%
+class: center, animated, zoomInUp
+
+---
+
+background-image: url("images/tm_isee_allpanels.png")
+background-size: contain
+background-position: 50% 50%
+class: center, animated, fadeIn
+
+---
+
+background-image: url("images/ss_tables.png")
+background-size: contain
+background-position: 50% 50%
+class: center, animated, zoomInUp
+
+---
+
+background-image: url("images/tm_isee_allpanels.png")
+background-size: contain
+background-position: 50% 50%
+class: center, animated, fadeIn
+
+---
+
+# I have got a quiz for you!
+
+--
+
+**Question 1**
+
+How many lines of code are required to realize this?
+
+--
+
+A) 4-5  
+B) 250-300  
+C) 7500-10000  
+
+---
+
+# I have got a quiz for you!
+
+**Question 1**
+
+How many lines of code are required to realize this?
+
+A) 4-5  
+**B) 250-300**  
+C) 7500-10000  
+
+--
+
+**Question 2**
+
+How many of these lines had to be typed by a human?
+
+A) 4-5  
+B) 250-300  
+C) 7500-10000  
+
+---
+
+# I have got a quiz for you!
+
+**Question 1**
+
+How many lines of code are required to realize this?
+
+A) 4-5  
+**B) 250-300**  
+C) 7500-10000  
+
+**Question 2**
+
+How many of these lines had to be typed by a human?
+
+**A) 4-5**  
+B) 250-300  
+C) 7500-10000  
+
+--
+
+I am not a magician, so I will explain you all about the trick...
+
+---
+
+class: center, bottom, fadeIn
+
+# Flexibility and customizability
+
+---
+
+background-image: url("images/gif_bsb2.gif")
+background-size: contain
+background-position: 50% 50%
+class: center, bottom, fadeIn
+
+# Flexibility and customizability
+
+---
+
+background-image: url("images/gif_reordering.gif")
+background-size: contain
+background-position: 50% 50%
+class: center, bottom
+
+# Reordering the panels - `iSEE`ing exactly what you want
+
+---
+
+background-image: url("images/tm_isee_reorderedpanels.png")
+background-size: contain
+background-position: 50% 25%
+class: center, bottom
+
+# Reordering the panels - `iSEE`ing exactly what you want
+
+---
+
+background-image: url("images/gif_colorbygene.gif")
+background-size: contain
+background-position: 50% 50%
+class: center, bottom
+
+# Augmenting the observed data with biological knowledge
+
+---
+
+background-image: url("images/gif_linkedtotable.gif")
+background-size: contain
+background-position: 50% 50%
+class: center, bottom
+
+# Linking the panels: going down the rabbit hole
+
+---
+
+background-image: url("images/gif_customde.gif")
+background-size: contain
+background-position: 50% 50%
+class: center, bottom
+
+# Designing custom panels to extend `iSEE`'s functionality
+
+---
+
+class: center, bottom
+
+# Working in a reproducible way
+
+---
+
+background-image: url("images/meme_owl.jpg")
+background-size: contain
+background-position: 50% 50%
+class: center, bottom
+
+# Working in a reproducible way
+
+&lt;!-- - "Oh, code..." --&gt;
+
+---
+
+background-image: url("images/gif_reprocode.gif")
+background-size: contain
+background-position: 50% 50%
+class: center, bottom
+
+# Meta-generating code: our solution for full reproducibility
+
+&lt;!-- ### `knit` me baby one more time --&gt;
+
+---
+
+background-image: url("images/meme_gandalf.jpg")
+background-size: contain
+class: center, bottom
+
+---
+
+&lt;!-- Markers: Pax9, Olig1, Cd68 --&gt;
+
+background-image: url("images/gif_toursteps.gif")
+background-size: contain
+background-position: 50% 50%
+class: center, bottom
+
+# Interactive tours: an efficient means to communicate
+
+---
+
+# Taking the express ticket to exploration: `iSEEfier`
+
+`iSEEfier`, work by **Najla Abassi**
+
+--
+
+&lt;p align="center"&gt;
+&lt;img src="images/iSEEfier_init.png" height="500"/&gt;
+&lt;/p&gt;
+
+---
+
+# Taking the express ticket to exploration: `iSEEfier`
+
+`iSEEfier`, work by **Najla Abassi**
+
+.pull-left[
+&lt;p align="center"&gt;
+&lt;img src="images/iSEEfier_markers.png" width="400"/&gt;
+&lt;/p&gt; 
+]
+
+.pull-right[
+`iSEEfier` significantly reduces the time and effort required to set up iSEE sessions  
+Got some configurations you would like to see covered? Just reach out!
+
+`iSEE`, `iSEEfier` and more packages are available on Bioconductor!
+]
+
+---
+
+# Achieving better communication and reachout
+
+--
+
+`iSEE` large collections of datasets - with **Ramon Massoni Badosa**
+
+&lt;p align="center"&gt;
+&lt;img src="images/ss_hcatonsils.png" alt="" height = "400"/&gt;
+&lt;/p&gt;
+
+[`https://shiny.imbei.uni-mainz.de/iSEE_TonsilDataAtlas/`](https://shiny.imbei.uni-mainz.de/iSEE_TonsilDataAtlas/) + [`https://bioconductor.org/packages/iSEEhub/`](https://bioconductor.org/packages/iSEEhub/)
+
+---
+
+# `iSEEindex` powering collections of datasets
+
+--
+
+&lt;p align="center"&gt;
+&lt;img src="images/ss_ifnresource.png" height="450"/&gt;
+&lt;/p&gt;
+
+[`https://rehwinkellab.shinyapps.io/ifnresource/`](https://rehwinkellab.shinyapps.io/ifnresource/)
+
+More examples: https://isee.github.io/apps.html
+
+---
+
+# `iSEEid` - need some help in annotating single cells?
+
+--
+
+&lt;p align="center"&gt;
+&lt;img src="images/iSEEid_panels.png" height="450"/&gt;
+&lt;/p&gt;
+
+[`https://bioconductor.org/packages/iSEEid`](https://bioconductor.org/packages/iSEEid)
+
+---
+
+# We want you to use `iSEE`!
+
+--
+
+... which is why there is [`https://isee.github.io/iUSEiSEE/`](https://isee.github.io/iUSEiSEE/)
+
+--
+
+&lt;p align="center"&gt;
+&lt;img src="images/iSEE_physalia.jpg" height="400"/&gt;
+&lt;/p&gt;
+
+[`https://www.physalia-courses.org/courses-workshops/isee/`](https://www.physalia-courses.org/courses-workshops/isee/)
+
+---
+
+# A few funny/useful things about `iSEE`
+
+--
+
+* We have modes and additional panels (starting from `iSEEu` and making the whole `iSEEverse`...) to extend its functionality
+
+--
+
+* `iSEE` has also some specific panels for microbiome data (via `iSEEtree`)
+
+--
+
+* `iSEEde` and `iSEEpathways` - working like a charm on any bulk RNA-seq dataset!
+
+--
+
+* You can use `iSEE` pretty much for any dataset/data type (phosphoproteome, I did not see that one coming...)! - Yes, even spatial transcriptomics!
+
+--
+
+* You can use `iSEE` as a local mini-server - `iSEE(sce)` `\(\rightarrow\)` `iSEE()`
+
+--
+
+* We are not alone in the "exploration business": [`https://github.com/federicomarini/awesome-expression-browser`](https://github.com/federicomarini/awesome-expression-browser) keeps track of the many existing solutions
+
+--
+
+* You can control `iSEE` with your voice
+
+---
+
+## `iSEE(sce, voice = TRUE)`
+
+&lt;iframe width="900" height="500" src="https://www.youtube-nocookie.com/embed/0crFZLwAJOE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;!-- Easter eggs included! --&gt;
+
+---
+
+# `iSEE`, from zero to hero
+
+What do you need?
+
+--
+
+1. Your data - preprocessed, annotated; ready for submission, or for lab meeting progress report.  
+   Format: SingleCellExperiment; Seurat, Scanpy are just one conversion step away!
+
+--
+
+1. Install `iSEE` once, with `BiocManager::install("iSEE")`
+
+--
+
+1. Launch `iSEE`, with `iSEE(sce)`
+
+--
+
+1. Explore, design, create compelling visualizations, tailor up the manuscript story  
+   `\(\rightarrow\)` Copy-paste in notebooks configs and code
+
+--
+
+1. Publish/deploy your dataset to be fully explored   
+   [`https://shiny.imbei.uni-mainz.de/iSEE_KDM6B_inhibition/`](https://shiny.imbei.uni-mainz.de/iSEE_KDM6B_inhibition/)
+
+--
+
+More examples? Check out [`https://isee.github.io/apps.html`](https://isee.github.io/apps.html) and [`https://github.com/iSEE/iSEE_instances/`](https://github.com/iSEE/iSEE_instances/) for inspiration!
+
+---
+
+# Proudly brought to you by...
+
+--
+
+&lt;p align="center"&gt;
+&lt;img src="images/bioconduck.jpg" alt="" height = "500"/&gt;
+&lt;/p&gt;
+
+---
+
+# You have seen/will see these packages in action
+
+- [`https://bioconductor.org/packages/pcaExplorer/`](https://bioconductor.org/packages/pcaExplorer/)
+- [`https://bioconductor.org/packages/ideal/`](https://bioconductor.org/packages/ideal/)
+- [`https://bioconductor.org/packages/GeneTonic/`](https://bioconductor.org/packages/GeneTonic/)
+- [`https://bioconductor.org/packages/iSEE/`](https://bioconductor.org/packages/iSEE/)
+- [`https://bioconductor.org/packages/iSEEu/`](https://bioconductor.org/packages/iSEEu/)
+- [`https://bioconductor.org/packages/iSEEde/`](https://bioconductor.org/packages/iSEEde/)
+- [`https://bioconductor.org/packages/iSEEpathways/`](https://bioconductor.org/packages/iSEEpathways/)
+- [`https://bioconductor.org/packages/iSEEindex/`](https://bioconductor.org/packages/iSEEindex/)
+- [`https://bioconductor.org/packages/iSEEhub/`](https://bioconductor.org/packages/iSEEhub/)
+- [`https://bioconductor.org/packages/iSEEtree/`](https://bioconductor.org/packages/iSEEtree/)
+- [`https://bioconductor.org/packages/iSEEfier/`](https://bioconductor.org/packages/iSEEfier/)
+- [`https://bioconductor.org/packages/iSEEid/`](https://bioconductor.org/packages/iSEEid/)
+
+--
+
+All of them are **free**, **open source**, there for you to **use them**!
+
+--
+
+Wanna install all things iSEE in one go? Enter the [`iSEEverse`](https://github.com/iSEE/iUSEiSEE/)
+
+`remotes::install_github("iSEE/iSEEverse")`
+
+---
+
+# Lessons learned along the journey - "why bother?"
+
+--
+
+* I've seen too many realizations of the _Anna Karenina principle for data analysis_ - and we have to do something to **get to the insight** you seek!
+
+--
+
+* I've been working in **fantastic (and challenging) interdisciplinary environments**, where people with different expertise come into play: We need platforms to foster this!
+
+--
+
+* There is a lot of beauty in using **community established standards** - datasets are not getting any less complex!
+
+--
+
+* Using standard interoperable frameworks takes you just **one step away from using our tools &amp; packages**
+
+--
+
+* Accompanying your publications with **live explorable versions of your data** helps you tell a good story, promotes open science, and fosters new viewpoints from other scientists
+
+---
+
+background-image: url("images/group_pic.jpg")
+background-size: cover
+background-position: 50% 50%
+class: center, bottom, inverse
+
+&lt;!-- -- --&gt;
+
+My research group &amp; the **`iSEE` development team** &amp; Bioc Community ❤️
+
+--
+
+## ... thank you for your attention!
+
+&lt;code&gt;<svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M16.1 260.2c-22.6 12.9-20.5 47.3 3.6 57.3L160 376V479.3c0 18.1 14.6 32.7 32.7 32.7c9.7 0 18.9-4.3 25.1-11.8l62-74.3 123.9 51.6c18.9 7.9 40.8-4.5 43.9-24.7l64-416c1.9-12.1-3.4-24.3-13.5-31.2s-23.3-7.5-34-1.4l-448 256zm52.1 25.5L409.7 90.6 190.1 336l1.2 1L68.2 285.7zM403.3 425.4L236.7 355.9 450.8 116.6 403.3 425.4z"/></svg> marinif@uni-mainz.de - <svg aria-hidden="true" role="img" viewBox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M407.8 294.7c-3.3-.4-6.7-.8-10-1.3c3.4 .4 6.7 .9 10 1.3zM288 227.1C261.9 176.4 190.9 81.9 124.9 35.3C61.6-9.4 37.5-1.7 21.6 5.5C3.3 13.8 0 41.9 0 58.4S9.1 194 15 213.9c19.5 65.7 89.1 87.9 153.2 80.7c3.3-.5 6.6-.9 10-1.4c-3.3 .5-6.6 1-10 1.4C74.3 308.6-9.1 342.8 100.3 464.5C220.6 589.1 265.1 437.8 288 361.1c22.9 76.7 49.2 222.5 185.6 103.4c102.4-103.4 28.1-156-65.8-169.9c-3.3-.4-6.7-.8-10-1.3c3.4 .4 6.7 .9 10 1.3c64.1 7.1 133.6-15.1 153.2-80.7C566.9 194 576 75 576 58.4s-3.3-44.7-21.6-52.9c-15.8-7.1-40-14.9-103.2 29.8C385.1 81.9 314.1 176.4 288 227.1z"/></svg>&lt;/code&gt; [`@federicomarini.bsky.social`](https://federicomarini.bsky.social)&lt;br&gt;
+&lt;br&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- This presentation: [`https://bit.ly/CZI_iSEE`](https://bit.ly/CZI_iSEE)&lt;br&gt; --&gt;
+&lt;!-- [`https://federicomarini.github.io/cziSEE/`](https://federicomarini.github.io/cziSEE/) --&gt;
+
+---
+
+# Time to get our hands dirty!
+
+Let's navigate to https://github.com/iSEE/iUSEiSEE/ - rendered at https://iSEE.github.io/iUSEiSEE. This is the "official" full documentation to learn how to use iSEE.
+
+If desired: Clone it locally/download as zip and unpack it:  
+[`https://github.com/iSEE/iUSEiSEE/`](https://github.com/iSEE/iUSEiSEE/) --&gt; `git clone git@github.com:iSEE/iUSEiSEE.git`
+
+Clone this repo on top - contains the presentation and the template for the exercises
+
+Start using the `2026_PhysaliaCourses_iSEE.Rproj` file in it
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+  "ratio": "16:9",
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
