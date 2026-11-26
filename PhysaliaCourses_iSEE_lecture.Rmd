@@ -85,7 +85,7 @@ We do...
 
 --
 
-You can find this presentation here:
+You can find this presentation here: [`https://github.com/imbeimainz/2026_PhysaliaCourses_iSEE`](https://github.com/imbeimainz/2026_PhysaliaCourses_iSEE)
 
 <!-- [`https://federicomarini.github.io/RMCR2021/`](https://federicomarini.github.io/RMCR2021/)<br> -->
 <!-- [`https://bit.ly/iSEE_RMCR`](https://bit.ly/iSEE_RMCR) -->
@@ -332,7 +332,7 @@ background-position: 50% 50%
 --
 
 Preprocessing details + `iSEE` configuration for this set can be found at 
-[`https://github.com/federicomarini/iSEE_instances`](https://github.com/federicomarini/iSEE_instances/tree/master/iSEE_tabulamuris)
+[`https://github.com/iSEE/iSEE_instances`](https://github.com/iSEE/iSEE_instances/tree/master/iSEE_tabulamuris)
 
 - 20 organs and tissues, from 8 different mice
 - 23036 genes
