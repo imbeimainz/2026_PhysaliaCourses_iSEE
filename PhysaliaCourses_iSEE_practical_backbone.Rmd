@@ -93,7 +93,7 @@ https://isee.github.io/iUSEiSEE/articles/d02_iSEE_overview.html
 # Session 3
 
 Exploration, done for real and in-depth, with iSEE  
-... with a keen eye on working in a reproudcible manner
+... with a keen eye on working in a reproducible manner
 
 https://isee.github.io/iUSEiSEE/articles/d02_iSEE_overview.html
 
