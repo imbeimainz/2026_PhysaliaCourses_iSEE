@@ -1,0 +1,8 @@
+element;intro
+#welcome;Welcome physalia team!
+#ReducedDimensionPlot1;Here we will talk about our first marker
+#ReducedDimensionPlot2;Here comes the second marker but on a tSNE plot
+#ReducedDimensionPlot3;Here is a UMAP plot
+#ReducedDimensionPlot1;again plot number 1, to put more context again
+#ReducedDimensionPlot3;plot 3 again, because we wanted to come back to that
+#goodbye;Thanks for taking a tour on our app!
